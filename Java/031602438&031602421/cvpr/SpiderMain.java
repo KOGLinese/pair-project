@@ -1,3 +1,4 @@
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,6 +8,13 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 public class SpiderMain {
 
@@ -14,7 +22,14 @@ public class SpiderMain {
     public static void main(String[] args) {
         StringBuilder t = new StringBuilder();
         try {
-            Document document = Jsoup.connect("http://openaccess.thecvf.com/CVPR2018.py").get();
+            String url = "http://openaccess.thecvf.com/CVPR2018.py";
+
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpGet httpget = new HttpGet(url);
+            String response = client.execute(httpget, new BasicResponseHandler());
+
+            Document document = Jsoup.parse(response);
+
             Elements ptitles = document.getElementsByClass("ptitle");
             ArrayList<String> links = new ArrayList<>();
             String link = "http://openaccess.thecvf.com/";
@@ -29,23 +44,23 @@ public class SpiderMain {
 
             int i = 0 ;
             // div id = papertitle 标题； div id = abstract 摘要
-            //System.out.println(links.size());
+            System.out.println(links.size());
             for(String paper: links){
                 Document doc = Jsoup.connect(paper).get();
                 String title = doc.select("div#papertitle").first().text();
                 String abstr = doc.select("div#abstract").first().text();
                 t.append(i);
-                t.append("\r\n");
+                t.append("\n");
                 t.append("Title: ");
                 t.append(title);
-                t.append("\r\n");
+                t.append("\n");
                 t.append("Abstract: ");
                 t.append(abstr);
 
                 if(i<links.size()-1){
-                    t.append("\r\n");
-                    t.append("\r\n");
-                    t.append("\r\n");
+                    t.append("\n");
+                    t.append("\n");
+                    t.append("\n");
                 }
                 System.out.println(i);
                 //System.out.println("Title:" + title);

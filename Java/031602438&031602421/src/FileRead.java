@@ -1,5 +1,8 @@
 
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,7 +10,24 @@ import java.util.List;
 
 public class FileRead {
 
+    ArrayList<String> titles = new ArrayList<String>();
+    ArrayList<String> abstracts = new ArrayList<String>();
 
+    /**
+     * 取出titles数组
+     * @return titles
+     */
+    public ArrayList<String> getTitles(){
+        return titles;
+    }
+
+    /**
+     * 取出abstracts数组
+     * @return abstracts
+     */
+    public ArrayList<String> getAbstracts(){
+        return abstracts;
+    }
     /**
      * 文本读入
      * @param file
@@ -18,13 +38,30 @@ public class FileRead {
             InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
             BufferedReader in = new BufferedReader(isr);
             StringBuilder str = new StringBuilder();
+
+
             int c_byte = 0;
             while((c_byte = in.read()) != -1){
                 str.append((char) c_byte);
+
+                if((char)c_byte == '\n'){
+                    if(str.toString().charAt(0)=='T' && str.toString().charAt(1)=='i' && str.toString().charAt(2)=='t'){
+                        str.delete(0,7);
+                        titles.add(str.toString());
+                    }else if(str.toString().charAt(0)=='A'){
+                        str.delete(0,10);
+                        abstracts.add(str.toString());
+                    }
+                    str.delete(0,str.toString().length());
+                }
             }
+            str.delete(0,10);
+            abstracts.add(str.toString());
+
             in.close();
             return str.toString();
         }catch (Exception e){
+                    e.printStackTrace();
                     System.out.println("文本读入失败！<error> :" + e.getMessage());
         }
         return "";

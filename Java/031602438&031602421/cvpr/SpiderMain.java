@@ -5,7 +5,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
@@ -18,6 +20,10 @@ import org.apache.http.util.EntityUtils;
 
 public class SpiderMain {
 
+    /**
+     * 取出pdf_link 数组
+     * @return
+     */
 
     public static void main(String[] args) {
         StringBuilder t = new StringBuilder();
@@ -44,7 +50,6 @@ public class SpiderMain {
 
             int i = 0 ;
             // div id = papertitle 标题； div id = abstract 摘要
-            System.out.println(links.size());
             for(String paper: links){
                 Document doc = Jsoup.connect(paper).get();
                 String title = doc.select("div#papertitle").first().text();
@@ -56,7 +61,10 @@ public class SpiderMain {
                 t.append("\n");
                 t.append("Abstract: ");
                 t.append(abstr);
-
+                //拼接pdf链接
+//                t.append("\n");
+//                t.append("PDF_Link: ");
+//                t.append(paper.replaceAll("/html","/papers").replaceAll(".html",".pdf"));
                 if(i<links.size()-1){
                     t.append("\n");
                     t.append("\n");
@@ -72,6 +80,7 @@ public class SpiderMain {
             e.printStackTrace();
         }
         System.out.println("爬虫结束，开始输出！");
+
         try{
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("result.txt"));
 

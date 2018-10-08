@@ -12,6 +12,7 @@ public class FileRead {
 
     ArrayList<String> titles = new ArrayList<String>();
     ArrayList<String> abstracts = new ArrayList<String>();
+    ArrayList<String> PDFLink = new ArrayList<>();
 
     /**
      * 取出titles数组
@@ -28,6 +29,12 @@ public class FileRead {
     public ArrayList<String> getAbstracts(){
         return abstracts;
     }
+
+    /**
+     * 取出pdf_link 数组
+     * @return
+     */
+    public ArrayList<String> getPDFLink() { return PDFLink;}
     /**
      * 文本读入
      * @param file
@@ -51,12 +58,22 @@ public class FileRead {
                     }else if(str.toString().charAt(0)=='A'){
                         str.delete(0,10);
                         abstracts.add(str.toString());
+                    }else if(str.toString().charAt(0)=='P'){
+                        str.delete(0,10);
+                        PDFLink.add(str.toString());
                     }
                     str.delete(0,str.toString().length());
                 }
             }
-            str.delete(0,10);
-            abstracts.add(str.toString());
+            //如果末尾是abstract abstract数组add,如果末尾是pdflink pdflink数组add
+            if(str.toString().charAt(0)=='A'){
+                str.delete(0,10);
+                abstracts.add(str.toString());
+            }
+            if(str.toString().charAt(0)=='P'){
+                str.delete(0,10);
+                PDFLink.add(str.toString());
+            }
 
             in.close();
             return str.toString();

@@ -2,8 +2,8 @@ import java.util.*;
 
 public class Tools {
 
-    Map<String,Integer> wordCount =new HashMap<String,Integer>();//单词统计
-    Map<String,Integer> phraseCount =new HashMap<String,Integer>();//词组统计
+    public Map<String,Integer> wordCount =new HashMap<String,Integer>();//单词统计
+    public Map<String,Integer> phraseCount =new HashMap<String,Integer>();//词组统计
 
     /**
      * 统计有效行数
@@ -69,11 +69,11 @@ public class Tools {
      */
     public int CountforWord(String ss,int ty){
         int ant=0;
-        String feng=":()[]\"\",.\\ -";//分隔符集合
-        StringTokenizer words = new StringTokenizer(ss,feng,true); //分割文本成单词。
+        String regex = "[^0-9a-zA-Z]";//分隔符集合
+        ss = ss.replaceAll(regex, " ");
+        StringTokenizer words = new StringTokenizer(ss); //分割文本成单词。
         try {
             while (words.hasMoreTokens()) {
-                System.out.println(words.nextToken());
                 String word = words.nextToken();
                 if (word.length() >= 4 && Character.isLetter(word.charAt(0)) && Character.isLetter(word.charAt(1)) && Character.isLetter(word.charAt(2)) && Character.isLetter(word.charAt(3))) {  //判断单词前4个是否为字母
                     ant++;
@@ -81,7 +81,7 @@ public class Tools {
 
                         wordCount.put(word, new Integer(ty==1 ? 10:1));
                     } else {
-                        int count = wordCount.get(word) + ty==1 ? 10:1;
+                        int count = wordCount.get(word) + (ty==1 ? 10:1);
                         wordCount.put(word, count);
                     }
                 }
@@ -98,16 +98,18 @@ public class Tools {
      *  ty 参数当ty==1 权重为10  ty==0 权重为1
      */
     public void CountforPhrase(String ss,int ant,int ty){
+        ss = ss.replaceAll("[^(\\x00-\\x7f)]","");
         StringBuilder mid=new StringBuilder();//分隔符
         StringBuilder wword=new StringBuilder();//单词拼接
         Queue<String> que1=new LinkedList<String>();//用于存储词组单词
         Queue<String> que2=new LinkedList<String>();//用于存储分隔符
-        String feng=" : ( ) [ ] \"  , . \\ = - ";//分隔符集合
+        String feng=",./;'[] \\<>?:\"{}|`~!@#$%^&*()_+-=";//分隔符集合
         StringTokenizer words = new StringTokenizer(ss,feng,true); //分割文本成单词。
         try {
             while (words.hasMoreTokens()) {
                 String word =words.nextToken();
                 if (word.length() >= 4 && Character.isLetter(word.charAt(0)) && Character.isLetter(word.charAt(1)) && Character.isLetter(word.charAt(2)) && Character.isLetter(word.charAt(3))) {  //判断单词前4个是否为字母
+
                     que2.offer(mid.toString());
                     mid.delete(0,mid.length());
                     que1.offer(word);
@@ -127,10 +129,10 @@ public class Tools {
                         // 进行统计操作
                         if(!phraseCount.containsKey(wword.toString()))
                         {
-                            phraseCount.put(wword.toString(),new Integer(ty==1 ? 10:1 ));
+                            phraseCount.put(wword.toString(),new Integer( ty==1 ? 10:1 ));
                         }
                         else{
-                            int count=phraseCount.get(wword.toString())+ty==1 ? 10:1;
+                            int count=phraseCount.get(wword.toString()) + (ty==1 ? 10:1);
                             phraseCount.put(wword.toString(),count);
                         }
                         que1.remove();
@@ -148,15 +150,26 @@ public class Tools {
             System.out.println("词频统计报错：");
             System.out.println(e.getMessage());
         }
+
     }
     /**
-     *  词频排序
+     *  词频排序 返回列表
      * @return list
      */
-    public List<HashMap.Entry<String, Integer>> WordSort(){
+    public List<HashMap.Entry<String, Integer>> getSortList(){
+
         List<HashMap.Entry<String, Integer>> wordList = new ArrayList<>();
-        for(Map.Entry<String, Integer> entry : wordCount.entrySet()){
-            wordList.add(entry); //将map中的元素放入list中
+//        if(t == 0){
+//            for(Map.Entry<String, Integer> entry : wordCount.entrySet()){
+//                wordList.add(entry); //将map中的元素放入list中
+//            }
+//        }else if(t == 1){
+//            for(Map.Entry<String, Integer> entry : phraseCount.entrySet()){
+//                wordList.add(entry); //将map中的元素放入list中
+//            }
+//        }
+        for(Map.Entry<String, Integer> entry : phraseCount.entrySet()){
+            wordList.add(entry);
         }
         Comparator<Map.Entry<String, Integer>> cmp = new Comparator<Map.Entry<String, Integer>>(){
             @Override
@@ -165,7 +178,7 @@ public class Tools {
                     return o1.getKey().compareTo(o2.getKey());     //值相同 按键返回字典序.
                 return o2.getValue()-o1.getValue();
             }
-            //逆序（从大到小）排列，正序为“return o1.getValue()-o2.getValue”
+            //逆序（从大到小）排列，正序为“return o1.getValue()-o2.getValue"
         };
         wordList.sort(cmp);
         return wordList;

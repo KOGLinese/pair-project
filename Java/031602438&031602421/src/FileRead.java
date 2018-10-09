@@ -91,10 +91,10 @@ public class FileRead {
      * @param lines
      * @param wList
      */
-    public void Output(int length, int wordAmount, int lines, List<HashMap.Entry<String, Integer>> wList){
+    public void Output(int length, int wordAmount, int lines, List<HashMap.Entry<String, Integer>> wList,String out,int n){
 
         try{
-            FileOutputStream res = new FileOutputStream("result.txt");
+            FileOutputStream res = new FileOutputStream(out);
             BufferedOutputStream bos = new BufferedOutputStream(res);
             String t = "characters: " + length +"\r\n"
                     +"words: " + wordAmount +"\r\n"
@@ -103,7 +103,7 @@ public class FileRead {
             for(HashMap.Entry<String,Integer> entry:wList){
                 count++;
                 t += "<"+entry.getKey() + ">: " + entry.getValue();
-                if(count<=9){
+                if(count<=n-1){
                     t += "\r\n";
                 }else{
                     break;

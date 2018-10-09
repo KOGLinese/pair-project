@@ -4,9 +4,9 @@ public class Main{
     public static void main(String[] args) {
         String inputFile = null;
         String outputFile = null;
-        boolean weight = false;
-        int m = 0;
-        int n = 0;
+        int weight = 0;
+        int m = 1;
+        int n = 10;
         for(int i=0;i<args.length;i++){
             switch(args[i]){
                 case "-i":
@@ -17,9 +17,9 @@ public class Main{
                     break;
                 case "-w":
                     if(args[++i].equals("0")){
-                        weight=false;
+                        weight=0;
                     }else{
-                        weight=true;
+                        weight=1;
                     }
                     break;
                 case "-m":
@@ -30,16 +30,30 @@ public class Main{
                     break;
             }
         }
-        System.out.println("读入的文件是"+inputFile);
-        System.out.println("输出的文件是"+outputFile);
-        System.out.println("权重为"+weight);
-        System.out.println("m="+m);
-        System.out.println("n="+n);
-//        FileRead fileRead = new FileRead();
-//        File file = new File("E:\\SpringDemo\\pair-project\\Java\\031602438&031602421\\result.txt");
-//        fileRead.Input(file);
-//        for(String title: fileRead.getTitles()){
-//            System.out.println(title);
-//        }
+
+        Tools tool = new Tools();
+        FileRead fileRead = new FileRead();
+        fileRead.Input(new File(inputFile));
+
+
+        int characters = 0;
+        int wordCounts = 0;
+        //权重为true title：1 abstract：0 权重为false title：0 abstract：0
+        for(String title: fileRead.getTitles()) {
+
+            characters += title.length();
+            wordCounts += tool.CountforWord(title,weight);
+            tool.CountforPhrase(title,m,weight);
+
+        }
+        for(String abs: fileRead.getAbstracts()){
+
+            characters += abs.length();
+            wordCounts += tool.CountforWord(abs,0);
+            tool.CountforPhrase(abs,m,0);
+
+        }
+
+        fileRead.Output(characters,fileRead.getTitles().size()*2,wordCounts,tool.getSortList(),outputFile,n);
     }
 }

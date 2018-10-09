@@ -54,6 +54,6 @@ public class Main{
 
         }
 
-        fileRead.Output(characters,fileRead.getTitles().size()*2,wordCounts,tool.getSortList(),outputFile,n);
+        fileRead.Output(characters,wordCounts,fileRead.getTitles().size()*2,tool.getSortList(),outputFile,n);
     }
 }

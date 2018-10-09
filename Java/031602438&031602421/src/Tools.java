@@ -69,6 +69,7 @@ public class Tools {
      */
     public int CountforWord(String ss,int ty){
         int ant=0;
+        ss = ss.toLowerCase();
         String regex = "[^0-9a-zA-Z]";//分隔符集合
         ss = ss.replaceAll(regex, " ");
         StringTokenizer words = new StringTokenizer(ss); //分割文本成单词。
@@ -98,7 +99,9 @@ public class Tools {
      *  ty 参数当ty==1 权重为10  ty==0 权重为1
      */
     public void CountforPhrase(String ss,int ant,int ty){
+        ss = ss.toLowerCase();
         ss = ss.replaceAll("[^(\\x00-\\x7f)]","");
+        ss = ss.replaceAll("\n","");
         StringBuilder mid=new StringBuilder();//分隔符
         StringBuilder wword=new StringBuilder();//单词拼接
         Queue<String> que1=new LinkedList<String>();//用于存储词组单词

@@ -117,4 +117,17 @@ public class FileRead {
             System.out.println(e.getMessage());
         }
     }
+    public void Write(String st, String name){
+        try{
+            FileOutputStream res = new FileOutputStream(name);
+            BufferedOutputStream bos = new BufferedOutputStream(res);
+
+            bos.write(st.getBytes(),0,st.getBytes().length);
+            bos.flush();
+            bos.close();
+        }catch (Exception e){
+            System.out.println("文本写出失败！");
+            System.out.println(e.getMessage());
+        }
+    }
 }

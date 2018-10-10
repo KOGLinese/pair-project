@@ -40,14 +40,13 @@ public class Main{
         int wordCounts = 0;
         //权重为true title：1 abstract：0 权重为false title：0 abstract：0
         for(String title: fileRead.getTitles()) {
-
+            title = title.replaceAll("\r\n","\n");
             characters += title.length();
             wordCounts += tool.CountforWord(title,weight);
             tool.CountforPhrase(title,m,weight);
 
         }
         for(String abs: fileRead.getAbstracts()){
-
             characters += abs.length();
             wordCounts += tool.CountforWord(abs,0);
             tool.CountforPhrase(abs,m,0);

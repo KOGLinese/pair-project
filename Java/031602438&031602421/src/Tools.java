@@ -162,15 +162,7 @@ public class Tools {
     public List<HashMap.Entry<String, Integer>> getSortList(){
 
         List<HashMap.Entry<String, Integer>> wordList = new ArrayList<>();
-//        if(t == 0){
-//            for(Map.Entry<String, Integer> entry : wordCount.entrySet()){
-//                wordList.add(entry); //将map中的元素放入list中
-//            }
-//        }else if(t == 1){
-//            for(Map.Entry<String, Integer> entry : phraseCount.entrySet()){
-//                wordList.add(entry); //将map中的元素放入list中
-//            }
-//        }
+
         for(Map.Entry<String, Integer> entry : phraseCount.entrySet()){
             wordList.add(entry);
         }

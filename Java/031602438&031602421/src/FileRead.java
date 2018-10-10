@@ -46,6 +46,9 @@ public class FileRead {
             BufferedReader in = new BufferedReader(isr);
             StringBuilder str = new StringBuilder();
 
+            titles.clear();
+            abstracts.clear();
+            PDFLink.clear();
 
             int c_byte = 0;
             while((c_byte = in.read()) != -1){

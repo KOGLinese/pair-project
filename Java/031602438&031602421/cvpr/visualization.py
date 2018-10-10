@@ -127,8 +127,8 @@ for i in AuthorList:
 	if author not in nodes_p and author['name'] in pop:
 		nodes_p.append(author)
 
-name = ["convolutional neural network","deep neural networks","results show that","experiments show that","generative adversarial networks","visual question answering","neural networks cnns","deep convolutional neural","experimental results show"]
-value = [200,70,56,45,43,39,36,33,32]
+name = ["neural networks","large-scale","convolutional neural network","deep neural networks","results show that","experiments show that","generative adversarial networks","visual question answering","neural networks cnns","deep convolutional neural","experimental results show","Learning Deep","Glimpse Clouds","Deep Q-Learning"]
+value = [497,200,240,70,56,45,43,39,36,33,32,100,50,30]
 
 wordcloud = WordCloud("CVPR热词高频词")
 wordcloud.add("", name, value, word_size_range=[20, 100])
@@ -361,7 +361,7 @@ v2=[7,
 bar2 = Bar("CVPR不同地区论文发表数(大于5篇)")
 bar2.add("", attr2, v2,label_color='#00BFFF', is_stack=True,is_datazoom_show=True,is_label_show=True)
 
-page.add(graph)
+
 page.add(graph2)
 page.add(wordcloud)
 page.add(bar)

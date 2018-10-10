@@ -30,29 +30,36 @@ public class Main{
                     break;
             }
         }
+        if(inputFile!=null && outputFile!=null){
+            Tools tool = new Tools();
+            FileRead fileRead = new FileRead();
+            fileRead.Input(new File(inputFile));
 
-        Tools tool = new Tools();
-        FileRead fileRead = new FileRead();
-        fileRead.Input(new File(inputFile));
 
+            int characters = 0;
+            int wordCounts = 0;
+            //权重为true title：1 abstract：0 权重为false title：0 abstract：0
+            for(String title: fileRead.getTitles()) {
+                title = title.replaceAll("\r\n","\n");
+                title = title.replaceAll("[^(\\x00-\\x7f)]","");
+                characters += title.length();
+                wordCounts += tool.CountforWord(title,weight);
+                tool.CountforPhrase(title,m,weight);
 
-        int characters = 0;
-        int wordCounts = 0;
-        //权重为true title：1 abstract：0 权重为false title：0 abstract：0
-        for(String title: fileRead.getTitles()) {
-            title = title.replaceAll("\r\n","\n");
-            characters += title.length();
-            wordCounts += tool.CountforWord(title,weight);
-            tool.CountforPhrase(title,m,weight);
+            }
+            for(String abs: fileRead.getAbstracts()){
+                abs = abs.replaceAll("\r\n","\n");
+                abs = abs.replaceAll("[^(\\x00-\\x7f)]","");
+                characters += abs.length();
+                wordCounts += tool.CountforWord(abs,0);
+                tool.CountforPhrase(abs,m,0);
 
+            }
+
+            fileRead.Output(characters,wordCounts,fileRead.getTitles().size()*2,tool.getSortList(),outputFile,n);
+        }else{
+            System.out.println("必需参数不能为空！");
         }
-        for(String abs: fileRead.getAbstracts()){
-            characters += abs.length();
-            wordCounts += tool.CountforWord(abs,0);
-            tool.CountforPhrase(abs,m,0);
 
-        }
-
-        fileRead.Output(characters,wordCounts,fileRead.getTitles().size()*2,tool.getSortList(),outputFile,n);
     }
 }

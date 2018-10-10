@@ -100,7 +100,6 @@ public class Tools {
      */
     public void CountforPhrase(String ss,int ant,int ty){
         ss = ss.toLowerCase();
-        ss = ss.replaceAll("[^(\\x00-\\x7f)]","");
         ss = ss.replaceAll("\n","");
         StringBuilder mid=new StringBuilder();//分隔符
         StringBuilder wword=new StringBuilder();//单词拼接

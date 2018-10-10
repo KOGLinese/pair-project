@@ -81,7 +81,6 @@ public class FileRead {
             in.close();
             return str.toString();
         }catch (Exception e){
-                    e.printStackTrace();
                     System.out.println("文本读入失败！<error> :" + e.getMessage());
         }
         return "";

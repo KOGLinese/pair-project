@@ -46,6 +46,9 @@ public class FileRead {
             BufferedReader in = new BufferedReader(isr);
             StringBuilder str = new StringBuilder();
 
+            titles.clear();
+            abstracts.clear();
+            PDFLink.clear();
 
             int c_byte = 0;
             while((c_byte = in.read()) != -1){
@@ -78,7 +81,6 @@ public class FileRead {
             in.close();
             return str.toString();
         }catch (Exception e){
-                    e.printStackTrace();
                     System.out.println("文本读入失败！<error> :" + e.getMessage());
         }
         return "";
@@ -91,10 +93,10 @@ public class FileRead {
      * @param lines
      * @param wList
      */
-    public void Output(int length, int wordAmount, int lines, List<HashMap.Entry<String, Integer>> wList){
+    public void Output(int length, int wordAmount, int lines, List<HashMap.Entry<String, Integer>> wList,String out,int n){
 
         try{
-            FileOutputStream res = new FileOutputStream("result.txt");
+            FileOutputStream res = new FileOutputStream(out);
             BufferedOutputStream bos = new BufferedOutputStream(res);
             String t = "characters: " + length +"\r\n"
                     +"words: " + wordAmount +"\r\n"
@@ -103,13 +105,26 @@ public class FileRead {
             for(HashMap.Entry<String,Integer> entry:wList){
                 count++;
                 t += "<"+entry.getKey() + ">: " + entry.getValue();
-                if(count<=9){
+                if(count<=n-1){
                     t += "\r\n";
                 }else{
                     break;
                 }
             }
             bos.write(t.getBytes(),0,t.getBytes().length);
+            bos.flush();
+            bos.close();
+        }catch (Exception e){
+            System.out.println("文本写出失败！");
+            System.out.println(e.getMessage());
+        }
+    }
+    public void Write(String st, String name){
+        try{
+            FileOutputStream res = new FileOutputStream(name);
+            BufferedOutputStream bos = new BufferedOutputStream(res);
+
+            bos.write(st.getBytes(),0,st.getBytes().length);
             bos.flush();
             bos.close();
         }catch (Exception e){
